@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -156,6 +157,35 @@ body{
     opacity:.85;
 }
 
+/* AD */
+
+.ad-section{
+    padding:25px 4% 10px;
+    text-align:center;
+}
+
+.ad-label{
+    color:#777;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.ad-box{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    min-height:167px;
+}
+
+.ad-box iframe{
+    display:block;
+    max-width:100%;
+    border:0;
+}
+
 /* SECTIONS */
 
 section{
@@ -194,7 +224,7 @@ section{
     overflow:hidden;
     cursor:pointer;
     background:#111;
-    transition:transform .25s, z-index .25s;
+    transition:transform .25s,z-index .25s;
 }
 
 .card:hover{
@@ -401,6 +431,19 @@ footer{
         font-size:14px;
     }
 
+    .ad-section{
+        padding:20px 15px 5px;
+    }
+
+    .ad-box{
+        overflow:hidden;
+    }
+
+    .ad-box iframe{
+        width:552px;
+        max-width:none;
+    }
+
     section{
         padding-left:15px;
         padding-right:15px;
@@ -505,6 +548,31 @@ footer{
     </div>
 
 </header>
+
+
+<!-- PUBBLICITÀ THE APOCALYPSE -->
+
+<div class="ad-section">
+
+    <div class="ad-label">
+        Pubblicità
+    </div>
+
+    <div class="ad-box">
+
+        <iframe
+            frameborder="0"
+            src="https://itch.io/embed/5038042?bg_color=000000&amp;fg_color=ffffff&amp;link_color=fc0000&amp;border_color=ffffff"
+            width="552"
+            height="167">
+            <a href="https://alessii8.itch.io/the-apocalypse">
+                THE APOCALYPSE by Alessii8
+            </a>
+        </iframe>
+
+    </div>
+
+</div>
 
 
 <!-- POPULAR -->
@@ -964,7 +1032,7 @@ function slide(id,direction){
     const amount = slider.clientWidth * 0.8;
 
     slider.scrollBy({
-        left: amount * direction,
+        left:amount * direction,
         behavior:"smooth"
     });
 
@@ -1125,8 +1193,8 @@ document.querySelectorAll(".slider").forEach(slider => {
 
 });
 
-
 </script>
 
 </body>
 </html>
+
