@@ -1,1335 +1,1208 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="theme-color" content="#080808">
 <title>DOWNFLIX</title>
 
 <style>
-:root{
-    --bg:#080808;
-    --panel:#111;
-    --text:#fff;
-    --muted:#aaa;
-    --accent:#e50914;
+:root {
+    --bg: #080808;
+    --panel: #141414;
+    --panel2: #202020;
+    --text: #fff;
+    --muted: #aaa;
+    --accent: #e50914;
+    --radius: 8px;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+html { scroll-behavior: smooth; scroll-padding-top: 85px; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
 }
 
-body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:Arial,Helvetica,sans-serif;
-    overflow-x:hidden;
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    padding: 0 4%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    z-index: 1000;
+    background: linear-gradient(to bottom, rgba(0,0,0,.9), transparent);
+    transition: background .25s;
 }
 
-/* NAVBAR */
+.navbar.scrolled { background: #080808; }
 
-.navbar{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:70px;
-    display:flex;
-    align-items:center;
-    padding:0 4%;
-    z-index:1000;
-    background:linear-gradient(to bottom,rgba(0,0,0,.9),transparent);
-    transition:.3s;
+.logo {
+    color: var(--accent);
+    font-size: 29px;
+    font-weight: 1000;
+    letter-spacing: -1.5px;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-.navbar.scrolled{
-    background:#080808;
+.nav-links {
+    display: flex;
+    gap: 19px;
+    align-items: center;
 }
 
-.logo{
-    color:var(--accent);
-    font-size:28px;
-    font-weight:900;
-    letter-spacing:-1px;
-    cursor:pointer;
+.nav-links a {
+    color: #ddd;
+    font-size: 13px;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
-.nav-links{
-    display:flex;
-    gap:25px;
-    margin-left:40px;
+.nav-links a:hover { color: var(--accent); }
+
+.search {
+    margin-left: auto;
+    position: relative;
 }
 
-.nav-links a{
-    color:#ddd;
-    text-decoration:none;
-    font-size:14px;
-    cursor:pointer;
-    transition:.2s;
+.search input {
+    width: 210px;
+    padding: 10px 13px 10px 35px;
+    background: rgba(0,0,0,.7);
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: white;
+    outline: none;
 }
 
-.nav-links a:hover{
-    color:#fff;
+.search input:focus { border-color: white; }
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 9px;
+    color: #bbb;
+    pointer-events: none;
 }
 
-.search{
-    margin-left:auto;
-}
-
-.search input{
-    width:190px;
-    padding:9px 14px;
-    border:1px solid #444;
-    border-radius:5px;
-    background:rgba(0,0,0,.65);
-    color:#fff;
-    outline:none;
-}
-
-.search input:focus{
-    border-color:#777;
-}
-
-/* HERO */
-
-.hero{
-    height:82vh;
-    min-height:550px;
-    position:relative;
-    display:flex;
-    align-items:center;
-    padding:0 5%;
+.hero {
+    min-height: 620px;
+    height: 85vh;
+    max-height: 900px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 100px 5% 60px;
     background:
-        linear-gradient(90deg,#080808 0%,rgba(8,8,8,.85) 25%,rgba(8,8,8,.25) 65%,#080808 100%),
-        linear-gradient(0deg,#080808 0%,transparent 35%),
+        linear-gradient(90deg, #080808 0%, rgba(8,8,8,.8) 30%, rgba(8,8,8,.15) 75%, #080808 100%),
+        linear-gradient(0deg, #080808 0%, transparent 40%),
         url("covers/1.jpg") center/cover no-repeat;
 }
 
-.hero-content{
-    max-width:550px;
-    margin-top:70px;
+.hero-content {
+    max-width: 570px;
+    position: relative;
+    z-index: 1;
 }
 
-.hero h1{
-    font-size:clamp(38px,5vw,70px);
-    margin-bottom:20px;
+.hero-kicker {
+    color: #ddd;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
-.hero p{
-    color:#ddd;
-    line-height:1.6;
-    font-size:17px;
-    margin-bottom:25px;
+.hero h1 {
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 1.02;
+    margin-bottom: 20px;
+    text-shadow: 0 3px 20px #000;
 }
 
-.hero-buttons{
-    display:flex;
-    gap:12px;
+.hero-description {
+    color: #ddd;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    text-shadow: 0 2px 8px #000;
 }
 
-.btn{
-    border:none;
-    padding:12px 23px;
-    border-radius:4px;
-    font-size:15px;
-    font-weight:bold;
-    cursor:pointer;
+.hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ccc;
+    font-size: 13px;
+    margin-bottom: 17px;
 }
 
-.btn-play{
-    background:#fff;
-    color:#000;
+.meta-badge {
+    border: 1px solid #777;
+    padding: 3px 6px;
+    border-radius: 3px;
 }
 
-.btn-info{
-    background:rgba(100,100,100,.7);
-    color:#fff;
+.hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.btn {
+    border: none;
+    border-radius: 5px;
+    padding: 13px 22px;
+    font-weight: bold;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: transform .2s, background .2s;
 }
 
-.btn:hover{
-    opacity:.85;
+.btn:hover { transform: scale(1.04); }
+
+.btn-play { background: white; color: black; }
+.btn-play:hover { background: #ddd; }
+
+.btn-info { background: rgba(100,100,100,.8); color: white; }
+.btn-info:hover { background: rgba(100,100,100,1); }
+
+.ad-section { padding: 18px 4% 25px; text-align: center; }
+.ad-label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+.ad-box { min-height: 167px; display: flex; align-items: center; justify-content: center; }
+.ad-box iframe { display: block; max-width: 100%; border: 0; }
+
+.welcome {
+    margin: 10px 4% 25px;
+    padding: 22px 25px;
+    background: linear-gradient(110deg, #211010, #111 65%);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-/* AD */
+.welcome h2 { font-size: 20px; margin-bottom: 6px; }
+.welcome p { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
-.ad-section{
-    padding:25px 4% 10px;
-    text-align:center;
+.welcome-tag {
+    background: var(--accent);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
-.ad-label{
-    color:#777;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    margin-bottom:10px;
+section.catalog-section { padding: 18px 4% 20px; }
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 13px;
 }
 
-.ad-box{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    width:100%;
-    min-height:167px;
+.section-title { font-size: 22px; font-weight: 750; }
+.section-subtitle { color: #777; font-size: 12px; margin-top: 5px; }
+
+.slider-wrapper { position: relative; }
+
+.slider {
+    display: flex;
+    gap: 13px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 6px 2px 17px;
+    cursor: grab;
 }
 
-.ad-box iframe{
-    display:block;
-    max-width:100%;
-    border:0;
+.slider::-webkit-scrollbar { display: none; }
+
+.card {
+    flex: 0 0 220px;
+    min-width: 0;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--panel);
+    cursor: pointer;
+    transition: transform .22s, box-shadow .22s;
+    isolation: isolate;
 }
 
-/* SECTIONS */
-
-section{
-    position:relative;
-    padding:20px 4% 10px;
+.card:hover {
+    transform: scale(1.045);
+    z-index: 5;
+    box-shadow: 0 10px 35px rgba(0,0,0,.55);
 }
 
-.section-title{
-    font-size:22px;
-    margin-bottom:14px;
+.card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #202020;
 }
 
-/* SLIDER */
-
-.slider-wrapper{
-    position:relative;
+.card-info {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 35px 11px 11px;
+    background: linear-gradient(transparent, rgba(0,0,0,.96));
+    opacity: 0;
+    transition: opacity .2s;
 }
 
-.slider{
-    display:flex;
-    gap:12px;
-    overflow-x:auto;
-    scroll-behavior:smooth;
-    scrollbar-width:none;
-    padding:5px 0 18px;
+.card:hover .card-info { opacity: 1; }
+
+.card-title {
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.4;
 }
 
-.slider::-webkit-scrollbar{
-    display:none;
+.card-category { color: #bbb; font-size: 10px; margin-top: 5px; }
+
+.card-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--accent);
+    border-radius: 3px;
+    padding: 4px 6px;
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-.card{
-    flex:0 0 220px;
-    position:relative;
-    border-radius:5px;
-    overflow:hidden;
-    cursor:pointer;
-    background:#111;
-    transition:transform .25s,z-index .25s;
+.slider-btn {
+    position: absolute;
+    top: 0;
+    bottom: 17px;
+    width: 43px;
+    border: none;
+    background: rgba(0,0,0,.72);
+    color: white;
+    font-size: 35px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity .2s, background .2s;
 }
 
-.card:hover{
-    transform:scale(1.06);
-    z-index:5;
+.slider-wrapper:hover .slider-btn { opacity: 1; }
+.slider-btn:hover { background: rgba(0,0,0,.95); }
+.slider-left { left: 0; }
+.slider-right { right: 0; }
+
+.category-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 15px 4% 5px;
 }
 
-.card img{
-    display:block;
-    width:100%;
-    aspect-ratio:16/9;
-    object-fit:cover;
+.category-chip {
+    padding: 9px 15px;
+    background: #1b1b1b;
+    color: #ddd;
+    border: 1px solid #333;
+    border-radius: 22px;
+    font-size: 12px;
+    transition: .2s;
 }
 
-.card-info{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:30px 10px 10px;
-    background:linear-gradient(transparent,rgba(0,0,0,.95));
-    opacity:0;
-    transition:.25s;
+.category-chip:hover,
+.category-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
 }
 
-.card:hover .card-info{
-    opacity:1;
+.search-results {
+    display: none;
+    padding: 35px 4%;
 }
 
-.card-title{
-    font-size:14px;
-    font-weight:bold;
+.search-results h2 { margin-bottom: 18px; }
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 15px;
 }
 
-.card-category{
-    font-size:11px;
-    color:#bbb;
-    margin-top:4px;
+.results-grid .card { width: 100%; }
+
+.empty-results {
+    color: #aaa;
+    padding: 35px 0;
+    line-height: 1.6;
 }
 
-/* SLIDER BUTTONS */
-
-.slider-btn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:42px;
-    height:80px;
-    border:none;
-    border-radius:4px;
-    background:rgba(0,0,0,.75);
-    color:#fff;
-    font-size:30px;
-    z-index:10;
-    cursor:pointer;
-    opacity:0;
-    transition:.2s;
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    padding: 20px;
+    background: rgba(0,0,0,.88);
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
 }
 
-.slider-wrapper:hover .slider-btn{
-    opacity:1;
+.modal.active { display: flex; }
+
+.modal-content {
+    width: min(1000px, 96vw);
+    background: #101010;
+    border-radius: 9px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 15px 70px #000;
+    animation: modalIn .2s ease-out;
 }
 
-.slider-btn:hover{
-    background:rgba(0,0,0,.95);
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(12px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.slider-left{
-    left:-5px;
+.video-container { background: black; }
+.video-container video { display: block; width: 100%; max-height: 70vh; background: black; }
+
+.close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0,0,0,.8);
+    color: white;
+    font-size: 25px;
+    z-index: 10;
 }
 
-.slider-right{
-    right:-5px;
+.close:hover { background: var(--accent); }
+
+.video-details { padding: 22px; }
+.video-details h2 { font-size: 25px; margin-bottom: 10px; padding-right: 45px; }
+.video-details p { color: #bbb; line-height: 1.6; font-size: 14px; }
+.detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.detail-tag { background: #252525; color: #ddd; padding: 6px 9px; border-radius: 4px; font-size: 11px; }
+
+footer {
+    padding: 45px 4% 28px;
+    margin-top: 20px;
+    border-top: 1px solid #1b1b1b;
+    color: #666;
+    text-align: center;
+    font-size: 12px;
+    line-height: 2;
 }
 
-/* SEARCH RESULT */
+.footer-logo { color: var(--accent); font-size: 22px; font-weight: 900; margin-bottom: 8px; }
 
-.no-results{
-    display:none;
-    padding:50px 4%;
-    color:#aaa;
-    font-size:18px;
+@media (max-width: 1050px) {
+    .navbar { gap: 20px; }
+    .nav-links { gap: 12px; }
+    .nav-links a { font-size: 12px; }
+    .search input { width: 170px; }
 }
 
-/* MODAL */
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:2000;
-    background:rgba(0,0,0,.9);
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-.modal.active{
-    display:flex;
-}
-
-.modal-content{
-    position:relative;
-    width:min(1000px,95vw);
-    background:#050505;
-    border-radius:8px;
-    overflow:hidden;
-    box-shadow:0 0 50px rgba(0,0,0,.8);
-}
-
-.video-container{
-    width:100%;
-    background:#000;
-}
-
-.video-container video{
-    display:block;
-    width:100%;
-    max-height:75vh;
-    background:#000;
-}
-
-.close{
-    position:absolute;
-    right:12px;
-    top:10px;
-    width:38px;
-    height:38px;
-    border:none;
-    border-radius:50%;
-    background:rgba(0,0,0,.8);
-    color:#fff;
-    font-size:25px;
-    cursor:pointer;
-    z-index:5;
-}
-
-.video-details{
-    padding:20px;
-}
-
-.video-details h2{
-    margin-bottom:8px;
-}
-
-.video-details p{
-    color:#aaa;
-    line-height:1.5;
-}
-
-/* FOOTER */
-
-footer{
-    padding:60px 4% 30px;
-    color:#666;
-    text-align:center;
-    font-size:13px;
-}
-
-/* MOBILE */
-
-@media(max-width:800px){
-
-    .navbar{
-        height:60px;
-        padding:0 15px;
-    }
-
-    .logo{
-        font-size:24px;
-    }
-
-    .nav-links{
-        display:none;
-    }
-
-    .search{
-        margin-left:auto;
-    }
-
-    .search input{
-        width:140px;
-    }
-
-    .hero{
-        height:70vh;
-        min-height:480px;
-        padding:0 20px;
+@media (max-width: 800px) {
+    .navbar { height: 62px; padding: 0 16px; gap: 15px; }
+    .logo { font-size: 24px; }
+    .nav-links { display: none; }
+    .search input { width: 175px; }
+    .hero {
+        height: 70vh;
+        min-height: 490px;
+        padding: 90px 22px 40px;
         background:
-            linear-gradient(90deg,#080808 0%,rgba(8,8,8,.75) 50%,rgba(8,8,8,.3) 100%),
-            linear-gradient(0deg,#080808 0%,transparent 45%),
+            linear-gradient(90deg, #080808 0%, rgba(8,8,8,.7) 55%, rgba(8,8,8,.25) 100%),
+            linear-gradient(0deg, #080808 0%, transparent 50%),
             url("covers/1.jpg") center/cover no-repeat;
     }
-
-    .hero-content{
-        margin-top:50px;
-    }
-
-    .hero h1{
-        font-size:40px;
-    }
-
-    .hero p{
-        font-size:14px;
-    }
-
-    .ad-section{
-        padding:20px 15px 5px;
-    }
-
-    .ad-box{
-        overflow:hidden;
-    }
-
-    .ad-box iframe{
-        width:552px;
-        max-width:none;
-    }
-
-    section{
-        padding-left:15px;
-        padding-right:15px;
-    }
-
-    .card{
-        flex:0 0 170px;
-    }
-
-    .slider-btn{
-        display:none;
-    }
-
-    .card-info{
-        opacity:1;
-    }
+    .hero h1 { font-size: 43px; }
+    .hero-description { font-size: 14px; max-width: 440px; }
+    .hero-kicker { font-size: 10px; }
+    .welcome { margin: 10px 15px 20px; padding: 18px; }
+    section.catalog-section { padding-left: 15px; padding-right: 15px; }
+    .card { flex-basis: 175px; }
+    .slider-btn { display: none; }
+    .card-info { opacity: 1; }
+    .ad-section { padding: 18px 15px; }
+    .ad-box { overflow: hidden; }
+    .ad-box iframe { max-width: 100%; }
+    .category-bar { margin-left: 15px; margin-right: 15px; }
+    .search-results { padding-left: 15px; padding-right: 15px; }
 }
 
-@media(max-width:500px){
+@media (max-width: 500px) {
+    .navbar { padding: 0 12px; }
+    .logo { font-size: 21px; }
+    .search input { width: 135px; padding: 9px 9px 9px 29px; font-size: 12px; }
+    .search-icon { left: 9px; top: 8px; }
+    .hero { min-height: 450px; height: 67vh; padding-left: 18px; padding-right: 18px; }
+    .hero h1 { font-size: 36px; }
+    .hero-description { font-size: 13px; line-height: 1.55; }
+    .hero-meta { font-size: 11px; }
+    .btn { padding: 11px 15px; font-size: 13px; }
+    .welcome { align-items: flex-start; }
+    .welcome h2 { font-size: 16px; }
+    .welcome p { font-size: 11px; }
+    .welcome-tag { display: none; }
+    .section-title { font-size: 19px; }
+    .card { flex-basis: 155px; }
+    .card-title { font-size: 12px; }
+    .results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .modal { padding: 8px; }
+    .video-details { padding: 16px; }
+    .video-details h2 { font-size: 20px; }
+}
 
-    .search input{
-        width:115px;
-        padding:8px 10px;
-    }
-
-    .hero{
-        height:65vh;
-        min-height:440px;
-    }
-
-    .hero h1{
-        font-size:34px;
-    }
-
-    .hero-buttons{
-        flex-wrap:wrap;
-    }
-
-    .card{
-        flex:0 0 150px;
-    }
-
-    .section-title{
-        font-size:19px;
-    }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-
 <nav class="navbar" id="navbar">
-
     <div class="logo" onclick="goHome()">DOWNFLIX</div>
 
     <div class="nav-links">
         <a onclick="goHome()">Home</a>
         <a onclick="scrollToSection('popular')">Più guardati</a>
+        <a onclick="scrollToSection('recent')">Novità</a>
         <a onclick="scrollToSection('anime')">Anime</a>
         <a onclick="scrollToSection('films')">Film</a>
-        <a onclick="scrollToSection('meme')">Meme & Extra</a>
+        <a onclick="scrollToSection('memes')">Meme</a>
     </div>
 
     <div class="search">
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Cerca..."
-            autocomplete="off"
-        >
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="search" placeholder="Cerca video..." autocomplete="off" aria-label="Cerca video">
     </div>
-
 </nav>
 
-
-<!-- HERO -->
-
-<header class="hero">
-
+<header class="hero" id="hero">
     <div class="hero-content">
-
-        <h1>I Pinguini di Madagascar</h1>
-
-        <p>
-            Skipper, Kowalski, Rico e Soldato sono pronti per una nuova
-            missione. Un'avventura piena di comicità, azione e caos.
-        </p>
-
-        <div class="hero-buttons">
-
-            <button class="btn btn-play" onclick="openVideo(1)">
-                ▶ Riproduci
-            </button>
-
-            <button class="btn btn-info" onclick="showInfo(1)">
-                ⓘ Informazioni
-            </button>
-
+        <div class="hero-kicker">DOWNFLIX ORIGINAL COLLECTION</div>
+        <h1 id="heroTitle">I Pinguini di Madagascar</h1>
+        <div class="hero-meta">
+            <span class="meta-badge">HD</span>
+            <span id="heroCategory">Animazione</span>
+            <span>•</span>
+            <span>Da vedere</span>
         </div>
-
+        <p class="hero-description" id="heroDescription">
+            Skipper, Kowalski, Rico e Soldato sono pronti per una nuova missione piena di comicità, azione e caos.
+        </p>
+        <div class="hero-buttons">
+            <button class="btn btn-play" id="heroPlay">▶ Riproduci</button>
+            <button class="btn btn-info" id="heroInfo">ⓘ Informazioni</button>
+        </div>
     </div>
-
 </header>
 
-
-<!-- PUBBLICITÀ THE APOCALYPSE -->
-
 <div class="ad-section">
-
-    <div class="ad-label">
-        Pubblicità
-    </div>
-
+    <div class="ad-label">Pubblicità</div>
     <div class="ad-box">
-
         <iframe
-            frameborder="0"
+            title="THE APOCALYPSE by Alessii8"
             src="https://itch.io/embed/5038042?bg_color=000000&amp;fg_color=ffffff&amp;link_color=fc0000&amp;border_color=ffffff"
             width="552"
-            height="167">
-            <a href="https://alessii8.itch.io/the-apocalypse">
-                THE APOCALYPSE by Alessii8
-            </a>
+            height="167"
+            loading="lazy">
+            <a href="https://alessii8.itch.io/the-apocalypse">THE APOCALYPSE by Alessii8</a>
         </iframe>
-
     </div>
-
 </div>
 
-
-<!-- POPULAR -->
-
-<section id="popular">
-
-    <h2 class="section-title">Più guardati</h2>
-
-    <div class="slider-wrapper">
-
-        <button
-            class="slider-btn slider-left"
-            onclick="slide('popularSlider',-1)"
-        >‹</button>
-
-        <div class="slider" id="popularSlider">
-
-            <div class="card" data-id="1" onclick="openVideo(1)">
-                <img src="covers/1.jpg" alt="I Pinguini di Madagascar">
-                <div class="card-info">
-                    <div class="card-title">I Pinguini di Madagascar</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="2" onclick="openVideo(2)">
-                <img src="covers/2.jpg" alt="I Pinguini di Madagascar 2">
-                <div class="card-info">
-                    <div class="card-title">I Pinguini di Madagascar 2</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="3" onclick="openVideo(3)">
-                <img src="covers/3.jpg" alt="I Pinguini di Madagascar 3">
-                <div class="card-info">
-                    <div class="card-title">I Pinguini di Madagascar 3</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="18" onclick="openVideo(18)">
-                <img src="covers/18.jpg" alt="Il panzone truffatore">
-                <div class="card-info">
-                    <div class="card-title">Il panzone truffatore</div>
-                    <div class="card-category">Film • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="14" onclick="openVideo(14)">
-                <img src="covers/14.jpg" alt="Why are you gay">
-                <div class="card-info">
-                    <div class="card-title">Why are you gay</div>
-                    <div class="card-category">Meme • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="15" onclick="openVideo(15)">
-                <img src="covers/15.jpg" alt="I Want It That Way">
-                <div class="card-info">
-                    <div class="card-title">I Want It That Way</div>
-                    <div class="card-category">Music • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="16" onclick="openVideo(16)">
-                <img src="covers/16.jpg" alt="Meet the Spy">
-                <div class="card-info">
-                    <div class="card-title">Meet the Spy</div>
-                    <div class="card-category">Animation • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="17" onclick="openVideo(17)">
-                <img src="covers/17.jpg" alt="Spooderman">
-                <div class="card-info">
-                    <div class="card-title">Spooderman</div>
-                    <div class="card-category">Film • Meme Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="6" onclick="openVideo(6)">
-                <img src="covers/6.jpg" alt="Ted">
-                <div class="card-info">
-                    <div class="card-title">Ted</div>
-                    <div class="card-category">Film • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="8" onclick="openVideo(8)">
-                <img src="covers/8.jpg" alt="Toy Story">
-                <div class="card-info">
-                    <div class="card-title">Toy Story</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="9" onclick="openVideo(9)">
-                <img src="covers/9.jpg" alt="GTA">
-                <div class="card-info">
-                    <div class="card-title">GTA</div>
-                    <div class="card-category">Game • Action</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="10" onclick="openVideo(10)">
-                <img src="covers/10.jpg" alt="Ted 2">
-                <div class="card-info">
-                    <div class="card-title">Ted 2</div>
-                    <div class="card-category">Film • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="11" onclick="openVideo(11)">
-                <img src="covers/11.jpg" alt="Madagascar">
-                <div class="card-info">
-                    <div class="card-title">Madagascar</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="12" onclick="openVideo(12)">
-                <img src="covers/12.jpg" alt="Madagascar 2">
-                <div class="card-info">
-                    <div class="card-title">Madagascar 2</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="13" onclick="openVideo(13)">
-                <img src="covers/13.jpg" alt="Gym Boss">
-                <div class="card-info">
-                    <div class="card-title">Gym Boss</div>
-                    <div class="card-category">Video • Comedy</div>
-                </div>
-            </div>
-
-        </div>
-
-        <button
-            class="slider-btn slider-right"
-            onclick="slide('popularSlider',1)"
-        >›</button>
-
+<div class="welcome">
+    <div>
+        <h2>Benvenuto su DOWNFLIX 🍿</h2>
+        <p>Film, anime, musica, gaming e meme. Tutto il tuo intrattenimento in un unico posto.</p>
     </div>
-
-</section>
-
-
-<!-- ANIME -->
-
-<section id="anime">
-
-    <h2 class="section-title">Anime</h2>
-
-    <div class="slider-wrapper">
-
-        <button
-            class="slider-btn slider-left"
-            onclick="slide('animeSlider',-1)"
-        >‹</button>
-
-        <div class="slider" id="animeSlider">
-
-            <div class="card" data-id="4" onclick="openVideo(4)">
-                <img src="covers/4.jpg" alt="Blue Lock">
-                <div class="card-info">
-                    <div class="card-title">Blue Lock</div>
-                    <div class="card-category">Anime • Sport</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="5" onclick="openVideo(5)">
-                <img src="covers/5.jpg" alt="Gojo">
-                <div class="card-info">
-                    <div class="card-title">Gojo</div>
-                    <div class="card-category">Anime • Action</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="7" onclick="openVideo(7)">
-                <img src="covers/7.jpg" alt="Goku vs Vegeta">
-                <div class="card-info">
-                    <div class="card-title">Goku vs Vegeta</div>
-                    <div class="card-category">Anime • Action</div>
-                </div>
-            </div>
-
-        </div>
-
-        <button
-            class="slider-btn slider-right"
-            onclick="slide('animeSlider',1)"
-        >›</button>
-
-    </div>
-
-</section>
-
-
-<!-- FILMS -->
-
-<section id="films">
-
-    <h2 class="section-title">Film</h2>
-
-    <div class="slider-wrapper">
-
-        <button
-            class="slider-btn slider-left"
-            onclick="slide('filmsSlider',-1)"
-        >‹</button>
-
-        <div class="slider" id="filmsSlider">
-
-            <div class="card" data-id="1" onclick="openVideo(1)">
-                <img src="covers/1.jpg" alt="I Pinguini di Madagascar">
-                <div class="card-info">
-                    <div class="card-title">I Pinguini di Madagascar</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="2" onclick="openVideo(2)">
-                <img src="covers/2.jpg" alt="I Pinguini di Madagascar 2">
-                <div class="card-info">
-                    <div class="card-title">I Pinguini di Madagascar 2</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="3" onclick="openVideo(3)">
-                <img src="covers/3.jpg" alt="I Pinguini di Madagascar 3">
-                <div class="card-info">
-                    <div class="card-title">I Pinguini di Madagascar 3</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="18" onclick="openVideo(18)">
-                <img src="covers/18.jpg" alt="Il panzone truffatore">
-                <div class="card-info">
-                    <div class="card-title">Il panzone truffatore</div>
-                    <div class="card-category">Film • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="17" onclick="openVideo(17)">
-                <img src="covers/17.jpg" alt="Spooderman">
-                <div class="card-info">
-                    <div class="card-title">Spooderman</div>
-                    <div class="card-category">Film • Meme Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="6" onclick="openVideo(6)">
-                <img src="covers/6.jpg" alt="Ted">
-                <div class="card-info">
-                    <div class="card-title">Ted</div>
-                    <div class="card-category">Film • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="8" onclick="openVideo(8)">
-                <img src="covers/8.jpg" alt="Toy Story">
-                <div class="card-info">
-                    <div class="card-title">Toy Story</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="10" onclick="openVideo(10)">
-                <img src="covers/10.jpg" alt="Ted 2">
-                <div class="card-info">
-                    <div class="card-title">Ted 2</div>
-                    <div class="card-category">Film • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="11" onclick="openVideo(11)">
-                <img src="covers/11.jpg" alt="Madagascar">
-                <div class="card-info">
-                    <div class="card-title">Madagascar</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="12" onclick="openVideo(12)">
-                <img src="covers/12.jpg" alt="Madagascar 2">
-                <div class="card-info">
-                    <div class="card-title">Madagascar 2</div>
-                    <div class="card-category">Film • Animation</div>
-                </div>
-            </div>
-
-        </div>
-
-        <button
-            class="slider-btn slider-right"
-            onclick="slide('filmsSlider',1)"
-        >›</button>
-
-    </div>
-
-</section>
-
-
-<!-- MEME & EXTRA -->
-
-<section id="meme">
-
-    <h2 class="section-title">Meme & Extra</h2>
-
-    <div class="slider-wrapper">
-
-        <button
-            class="slider-btn slider-left"
-            onclick="slide('memeSlider',-1)"
-        >‹</button>
-
-        <div class="slider" id="memeSlider">
-
-            <div class="card" data-id="14" onclick="openVideo(14)">
-                <img src="covers/14.jpg" alt="Why are you gay">
-                <div class="card-info">
-                    <div class="card-title">Why are you gay</div>
-                    <div class="card-category">Meme • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="15" onclick="openVideo(15)">
-                <img src="covers/15.jpg" alt="I Want It That Way">
-                <div class="card-info">
-                    <div class="card-title">I Want It That Way</div>
-                    <div class="card-category">Music • Comedy</div>
-                </div>
-            </div>
-
-            <div class="card" data-id="16" onclick="openVideo(16)">
-                <img src="covers/16.jpg" alt="Meet the Spy">
-                <div class="card-info">
-                    <div class="card-title">Meet the Spy</div>
-                    <div class="card-category">Animation • Comedy</div>
-                </div>
-            </div>
-
-        </div>
-
-        <button
-            class="slider-btn slider-right"
-            onclick="slide('memeSlider',1)"
-        >›</button>
-
-    </div>
-
-</section>
-
-
-<div class="no-results" id="noResults">
-    Nessun risultato trovato.
+    <div class="welcome-tag">23 VIDEO DISPONIBILI</div>
 </div>
 
+<div class="category-bar" id="categoryBar">
+    <button class="category-chip active" data-filter="Tutti">Tutti</button>
+    <button class="category-chip" data-filter="Film">🎬 Film</button>
+    <button class="category-chip" data-filter="Anime">⚡ Anime</button>
+    <button class="category-chip" data-filter="Animazione">🐧 Animazione</button>
+    <button class="category-chip" data-filter="Meme">😂 Meme</button>
+    <button class="category-chip" data-filter="Musica">🎵 Musica</button>
+    <button class="category-chip" data-filter="Horror">👻 Horror</button>
+    <button class="category-chip" data-filter="Gaming">🎮 Gaming</button>
+    <button class="category-chip" data-filter="Comedy">🤣 Comedy</button>
+</div>
 
-<!-- VIDEO MODAL -->
+<div class="search-results" id="searchResults">
+    <h2 id="resultsTitle">Risultati</h2>
+    <div class="results-grid" id="resultsGrid"></div>
+    <div class="empty-results" id="emptyResults" style="display:none">
+        Nessun video trovato. Prova con un altro titolo o una categoria.
+    </div>
+</div>
 
-<div class="modal" id="videoModal">
+<main id="catalog">
 
+    <section class="catalog-section" id="popular">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">🔥 Più guardati</h2>
+                <p class="section-subtitle">I contenuti da non perdere</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('popularSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="popularSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('popularSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="recent">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">✨ Aggiunti di recente</h2>
+                <p class="section-subtitle">Gli ultimi contenuti aggiunti alla raccolta</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('recentSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="recentSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('recentSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="anime">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">⚡ Anime & combattimenti</h2>
+                <p class="section-subtitle">Sfide epiche e personaggi leggendari</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('animeSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="animeSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('animeSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="films">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">🎬 Film & commedie</h2>
+                <p class="section-subtitle">Avventure, risate e momenti memorabili</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('filmsSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="filmsSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('filmsSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="animation">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">🐧 Animazione</h2>
+                <p class="section-subtitle">Personaggi animati e avventure fuori di testa</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('animationSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="animationSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('animationSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="memes">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">😂 Meme & momenti assurdi</h2>
+                <p class="section-subtitle">Internet al suo massimo livello di caos</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('memeSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="memeSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('memeSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="music">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">🎵 Musica & performance</h2>
+                <p class="section-subtitle">Canzoni e scene diventate iconiche</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('musicSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="musicSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('musicSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="horror">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">👻 Horror & brividi</h2>
+                <p class="section-subtitle">Per chi ama le atmosfere inquietanti</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('horrorSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="horrorSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('horrorSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="gaming">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">🎮 Gaming zone</h2>
+                <p class="section-subtitle">Videogiochi, azione e sfide</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('gamingSlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="gamingSlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('gamingSlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+    <section class="catalog-section" id="comedy">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">🤣 Comedy club</h2>
+                <p class="section-subtitle">La raccolta per farsi due risate</p>
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <button class="slider-btn slider-left" onclick="slide('comedySlider',-1)" aria-label="Scorri a sinistra">‹</button>
+            <div class="slider" id="comedySlider"></div>
+            <button class="slider-btn slider-right" onclick="slide('comedySlider',1)" aria-label="Scorri a destra">›</button>
+        </div>
+    </section>
+
+</main>
+
+<div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle">
     <div class="modal-content">
-
-        <button class="close" onclick="closeVideo()">×</button>
-
+        <button class="close" id="closeModal" aria-label="Chiudi">×</button>
         <div class="video-container">
-
-            <video
-                id="videoPlayer"
-                controls
-                playsinline
-            ></video>
-
+            <video id="videoPlayer" controls playsinline preload="metadata"></video>
         </div>
-
         <div class="video-details">
-
             <h2 id="videoTitle"></h2>
-
             <p id="videoDescription"></p>
-
+            <div class="detail-tags" id="detailTags"></div>
         </div>
-
     </div>
-
 </div>
-
 
 <footer>
-    © 2026 DOWNFLIX
+    <div class="footer-logo">DOWNFLIX</div>
+    <div>Il tuo angolo di intrattenimento.</div>
+    <div>© 2026 DOWNFLIX • Creato da Alessii8</div>
 </footer>
 
-
 <script>
-
-/* VIDEO DATABASE */
+"use strict";
 
 const videos = {
-
-    1:{
-        title:"I Pinguini di Madagascar",
-        description:"Skipper, Kowalski, Rico e Soldato sono pronti per una nuova missione.",
-        category:"Film • Animation"
+    1: {
+        title: "I Pinguini di Madagascar",
+        description: "Skipper, Kowalski, Rico e Soldato sono pronti per una nuova missione piena di comicità, azione e caos.",
+        category: "Animazione",
+        tags: ["Film", "Animazione", "Comedy"],
+        popular: true,
+        hero: true
     },
-
-    2:{
-        title:"I Pinguini di Madagascar 2",
-        description:"I pinguini tornano con una nuova avventura piena di caos.",
-        category:"Film • Animation"
+    2: {
+        title: "I Pinguini di Madagascar 2",
+        description: "I pinguini tornano con una nuova avventura piena di caos.",
+        category: "Animazione",
+        tags: ["Film", "Animazione", "Comedy"],
+        popular: true
     },
-
-    3:{
-        title:"I Pinguini di Madagascar 3",
-        description:"Una nuova avventura porta i pinguini in giro per il mondo.",
-        category:"Film • Animation"
+    3: {
+        title: "I Pinguini di Madagascar 3",
+        description: "Una nuova avventura porta i pinguini in giro per il mondo.",
+        category: "Animazione",
+        tags: ["Film", "Animazione", "Comedy"],
+        popular: true
     },
-
-    4:{
-        title:"Blue Lock",
-        description:"Una sfida calcistica dove solo i migliori possono emergere.",
-        category:"Anime • Sport"
+    4: {
+        title: "Blue Lock",
+        description: "Una sfida calcistica dove solo i migliori possono emergere.",
+        category: "Anime",
+        tags: ["Anime", "Sport"],
+        popular: true
     },
-
-    5:{
-        title:"Gojo",
-        description:"Un episodio dedicato a uno dei personaggi più potenti dell'anime.",
-        category:"Anime • Action"
+    5: {
+        title: "Gojo",
+        description: "Un episodio dedicato a uno dei personaggi più potenti dell'anime.",
+        category: "Anime",
+        tags: ["Anime", "Azione"],
+        popular: true
     },
-
-    6:{
-        title:"Ted",
-        description:"Un orsetto decisamente fuori dal normale.",
-        category:"Film • Comedy"
+    6: {
+        title: "Ted",
+        description: "Un orsetto decisamente fuori dal normale.",
+        category: "Comedy",
+        tags: ["Film", "Comedy"],
+        popular: true
     },
-
-    7:{
-        title:"Goku vs Vegeta",
-        description:"Una delle sfide più iconiche tra Goku e Vegeta.",
-        category:"Anime • Action"
+    7: {
+        title: "Goku vs Vegeta",
+        description: "Una delle sfide più iconiche tra Goku e Vegeta.",
+        category: "Anime",
+        tags: ["Anime", "Azione"],
+        popular: true
     },
-
-    8:{
-        title:"Toy Story",
-        description:"Un'avventura nel mondo dei giocattoli.",
-        category:"Film • Animation"
+    8: {
+        title: "Toy Story",
+        description: "Un'avventura nel mondo dei giocattoli.",
+        category: "Animazione",
+        tags: ["Film", "Animazione"],
+        popular: true
     },
-
-    9:{
-        title:"GTA",
-        description:"Macchine, missioni, inseguimenti e caos totale.",
-        category:"Game • Action"
+    9: {
+        title: "GTA",
+        description: "Macchine, missioni, inseguimenti e caos totale.",
+        category: "Gaming",
+        tags: ["Gaming", "Azione"],
+        popular: true
     },
-
-    10:{
-        title:"Ted 2",
-        description:"Ted è tornato con una nuova avventura.",
-        category:"Film • Comedy"
+    10: {
+        title: "Ted 2",
+        description: "Ted è tornato con una nuova avventura.",
+        category: "Comedy",
+        tags: ["Film", "Comedy"],
+        popular: true
     },
-
-    11:{
-        title:"Madagascar",
-        description:"Un gruppo di animali lascia lo zoo e si ritrova in una nuova avventura.",
-        category:"Film • Animation"
+    11: {
+        title: "Madagascar",
+        description: "Un gruppo di animali lascia lo zoo e si ritrova in una nuova avventura.",
+        category: "Animazione",
+        tags: ["Film", "Animazione", "Comedy"],
+        popular: true
     },
-
-    12:{
-        title:"Madagascar 2",
-        description:"Alex e i suoi amici affrontano una nuova avventura.",
-        category:"Film • Animation"
+    12: {
+        title: "Madagascar 2",
+        description: "Alex e i suoi amici affrontano una nuova avventura.",
+        category: "Animazione",
+        tags: ["Film", "Animazione", "Comedy"],
+        popular: true
     },
-
-    13:{
-        title:"Gym Boss",
-        description:"Il boss della palestra non scherza.",
-        category:"Video • Comedy"
+    13: {
+        title: "Gym Boss",
+        description: "Il boss della palestra non scherza.",
+        category: "Comedy",
+        tags: ["Comedy", "Meme"],
+        popular: true
     },
-
-    14:{
-        title:"Why are you gay",
-        description:"L'iconica intervista diventata uno dei meme più famosi del web.",
-        category:"Meme • Comedy"
+    14: {
+        title: "Why are you gay",
+        description: "L'iconica intervista diventata uno dei meme più famosi del web.",
+        category: "Meme",
+        tags: ["Meme", "Comedy"],
+        popular: true
     },
-
-    15:{
-        title:"I Want It That Way",
-        description:"La celebre scena della lineup della polizia di Brooklyn Nine-Nine.",
-        category:"Music • Comedy"
+    15: {
+        title: "I Want It That Way",
+        description: "La celebre scena della lineup della polizia di Brooklyn Nine-Nine.",
+        category: "Musica",
+        tags: ["Musica", "Comedy", "Meme"],
+        popular: true
     },
-
-    16:{
-        title:"Meet the Spy",
-        description:"Il cortometraggio ufficiale di Team Fortress 2 dedicato allo Spy.",
-        category:"Animation • Comedy"
+    16: {
+        title: "Meet the Spy",
+        description: "Il cortometraggio di Team Fortress 2 dedicato allo Spy.",
+        category: "Gaming",
+        tags: ["Gaming", "Animazione", "Comedy"],
+        popular: true
     },
-
-    17:{
-        title:"Spooderman",
-        description:"Spider-Man in versione meme: grandi poteri, zero senso e caos totale.",
-        category:"Film • Meme Comedy"
+    17: {
+        title: "Spooderman",
+        description: "Spider-Man in versione meme: grandi poteri, zero senso e caos totale.",
+        category: "Meme",
+        tags: ["Meme", "Animazione", "Comedy"],
+        popular: true
     },
-
-    18:{
-        title:"Il panzone truffatore",
-        description:"Una commedia esilarante tra raggiri impossibili e colpi di scena inaspettati.",
-        category:"Film • Comedy"
+    18: {
+        title: "Il panzone truffatore",
+        description: "Una commedia esilarante tra raggiri impossibili e colpi di scena inaspettati.",
+        category: "Comedy",
+        tags: ["Film", "Comedy"],
+        popular: true
+    },
+    19: {
+        title: "Racist Mario",
+        description: "Una parodia assurda del mondo dei videogiochi.",
+        category: "Meme",
+        tags: ["Meme", "Gaming", "Comedy"],
+        popular: false
+    },
+    20: {
+        title: "FNAF 4 Song",
+        description: "Una canzone ispirata alle atmosfere horror di Five Nights at Freddy's.",
+        category: "Horror",
+        tags: ["Musica", "Horror", "Gaming"],
+        popular: false
+    },
+    21: {
+        title: "Kung Fu Panda EP1",
+        description: "Un'avventura tra kung fu, allenamento e combattimenti.",
+        category: "Animazione",
+        tags: ["Film", "Animazione", "Comedy"],
+        popular: false
+    },
+    22: {
+        title: "Apriti Sesamo SpongeBob",
+        description: "Un momento assurdo e divertente dal mondo sottomarino.",
+        category: "Meme",
+        tags: ["Meme", "Animazione", "Comedy"],
+        popular: false
+    },
+    23: {
+        title: "Grattata Palle",
+        description: "Un meme demenziale per gli amanti dell'umorismo assurdo.",
+        category: "Meme",
+        tags: ["Meme", "Comedy"],
+        popular: false
     }
-
 };
 
+const sections = {
+    popularSlider: id => videos[id].popular,
+    recentSlider: id => id >= 19,
+    animeSlider: id => videos[id].tags.includes("Anime"),
+    filmsSlider: id => videos[id].tags.includes("Film"),
+    animationSlider: id => videos[id].tags.includes("Animazione"),
+    memeSlider: id => videos[id].tags.includes("Meme"),
+    musicSlider: id => videos[id].tags.includes("Musica"),
+    horrorSlider: id => videos[id].tags.includes("Horror"),
+    gamingSlider: id => videos[id].tags.includes("Gaming"),
+    comedySlider: id => videos[id].tags.includes("Comedy")
+};
 
-/* OPEN VIDEO */
+let activeFilter = "Tutti";
+let activeQuery = "";
 
-function openVideo(id){
-
+function makeCard(id, badgeText = "") {
     const video = videos[id];
+    const card = document.createElement("article");
+    card.className = "card";
+    card.dataset.id = String(id);
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", "Riproduci " + video.title);
 
-    if(!video) return;
+    const img = document.createElement("img");
+    img.src = "covers/" + id + ".jpg";
+    img.alt = video.title;
+    img.loading = "lazy";
+    img.onerror = function () {
+        this.style.visibility = "hidden";
+    };
 
-    const player = document.getElementById("videoPlayer");
+    const info = document.createElement("div");
+    info.className = "card-info";
 
-    document.getElementById("videoTitle").textContent = video.title;
+    const title = document.createElement("div");
+    title.className = "card-title";
+    title.textContent = video.title;
 
-    document.getElementById("videoDescription").textContent =
-        video.description;
+    const category = document.createElement("div");
+    category.className = "card-category";
+    category.textContent = video.tags.join(" • ");
 
-    player.src = "video" + id + ".mp4";
+    info.append(title, category);
+    card.append(img, info);
 
-    document.getElementById("videoModal").classList.add("active");
+    if (badgeText) {
+        const badge = document.createElement("span");
+        badge.className = "card-badge";
+        badge.textContent = badgeText;
+        card.appendChild(badge);
+    }
 
-    document.body.style.overflow = "hidden";
+    card.addEventListener("click", () => openVideo(id));
+    card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openVideo(id);
+        }
+    });
 
-    player.load();
-
-    player.play().catch(()=>{});
-
+    return card;
 }
 
+function renderCatalog() {
+    for (const [sliderId, predicate] of Object.entries(sections)) {
+        const slider = document.getElementById(sliderId);
+        slider.replaceChildren();
 
-/* CLOSE VIDEO */
+        const ids = Object.keys(videos)
+            .map(Number)
+            .filter(predicate)
+            .sort((a, b) => a - b);
 
-function closeVideo(){
+        ids.forEach(id => {
+            const badge = sliderId === "recentSlider" ? "NUOVO" : "";
+            slider.appendChild(makeCard(id, badge));
+        });
+    }
+}
 
+function openVideo(id) {
+    const video = videos[id];
+    if (!video) return;
+
+    const player = document.getElementById("videoPlayer");
+    document.getElementById("videoTitle").textContent = video.title;
+    document.getElementById("videoDescription").textContent = video.description;
+
+    const tags = document.getElementById("detailTags");
+    tags.replaceChildren();
+
+    video.tags.forEach(tag => {
+        const element = document.createElement("span");
+        element.className = "detail-tag";
+        element.textContent = tag;
+        tags.appendChild(element);
+    });
+
+    player.src = "video" + id + ".mp4";
+    document.getElementById("videoModal").classList.add("active");
+    document.body.style.overflow = "hidden";
+    player.load();
+
+    const playAttempt = player.play();
+    if (playAttempt && typeof playAttempt.catch === "function") {
+        playAttempt.catch(() => {});
+    }
+}
+
+function showInfo(id) {
+    const video = videos[id];
+    if (!video) return;
+
+    const player = document.getElementById("videoPlayer");
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+
+    document.getElementById("videoTitle").textContent = video.title;
+    document.getElementById("videoDescription").textContent = video.description;
+
+    const tags = document.getElementById("detailTags");
+    tags.replaceChildren();
+
+    video.tags.forEach(tag => {
+        const element = document.createElement("span");
+        element.className = "detail-tag";
+        element.textContent = tag;
+        tags.appendChild(element);
+    });
+
+    document.getElementById("videoModal").classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeVideo() {
     const modal = document.getElementById("videoModal");
-
     const player = document.getElementById("videoPlayer");
 
     player.pause();
-
     player.removeAttribute("src");
-
     player.load();
 
     modal.classList.remove("active");
-
     document.body.style.overflow = "";
-
 }
 
-
-/* CLICK OUTSIDE MODAL */
-
-document.getElementById("videoModal").addEventListener("click",function(e){
-
-    if(e.target === this){
-        closeVideo();
-    }
-
-});
-
-
-/* ESC */
-
-document.addEventListener("keydown",function(e){
-
-    if(e.key === "Escape"){
-        closeVideo();
-    }
-
-});
-
-
-/* SLIDER */
-
-function slide(id,direction){
-
+function slide(id, direction) {
     const slider = document.getElementById(id);
-
-    const amount = slider.clientWidth * 0.8;
+    if (!slider) return;
 
     slider.scrollBy({
-        left:amount * direction,
-        behavior:"smooth"
+        left: slider.clientWidth * 0.8 * direction,
+        behavior: "smooth"
     });
-
 }
 
-
-/* SEARCH */
-
-const searchInput = document.getElementById("searchInput");
-
-searchInput.addEventListener("input",function(){
-
-    const query = this.value.toLowerCase().trim();
-
-    const cards = document.querySelectorAll(".card");
-
-    let found = 0;
-
-    cards.forEach(card => {
-
-        const id = card.dataset.id;
-
-        const video = videos[id];
-
-        if(!video) return;
-
-        const text =
-            video.title.toLowerCase() +
-            " " +
-            video.description.toLowerCase() +
-            " " +
-            video.category.toLowerCase();
-
-        const match = text.includes(query);
-
-        card.style.display = match ? "" : "none";
-
-        if(match) found++;
-
+function goHome() {
+    activeFilter = "Tutti";
+    activeQuery = "";
+    document.getElementById("searchInput").value = "";
+    document.querySelectorAll(".category-chip").forEach(chip => {
+        chip.classList.toggle("active", chip.dataset.filter === "Tutti");
     });
 
-    document.getElementById("noResults").style.display =
-        query && found === 0 ? "block" : "none";
+    document.getElementById("searchResults").style.display = "none";
+    document.getElementById("catalog").style.display = "";
+    document.getElementById("hero").style.display = "";
+    document.querySelector(".ad-section").style.display = "";
+    document.querySelector(".welcome").style.display = "";
+    document.getElementById("categoryBar").style.display = "";
 
-});
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
-
-/* NAVBAR */
-
-window.addEventListener("scroll",function(){
-
-    const navbar = document.getElementById("navbar");
-
-    if(window.scrollY > 50){
-        navbar.classList.add("scrolled");
-    }else{
-        navbar.classList.remove("scrolled");
-    }
-
-});
-
-
-/* SCROLL TO SECTION */
-
-function scrollToSection(id){
-
+function scrollToSection(id) {
     const section = document.getElementById(id);
+    if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
-    if(section){
+function matchesFilter(video, filter) {
+    if (filter === "Tutti") return true;
+    return video.category === filter || video.tags.includes(filter);
+}
 
-        section.scrollIntoView({
-            behavior:"smooth",
-            block:"start"
+function runSearch() {
+    const query = activeQuery.toLowerCase();
+    const results = Object.keys(videos)
+        .map(Number)
+        .filter(id => {
+            const video = videos[id];
+            const searchable = [
+                video.title,
+                video.description,
+                video.category,
+                ...video.tags
+            ].join(" ").toLowerCase();
+
+            return searchable.includes(query) && matchesFilter(video, activeFilter);
         });
 
+    const resultsSection = document.getElementById("searchResults");
+    const resultsGrid = document.getElementById("resultsGrid");
+    const empty = document.getElementById("emptyResults");
+    const hasFilter = activeFilter !== "Tutti";
+
+    if (!query && !hasFilter) {
+        resultsSection.style.display = "none";
+        document.getElementById("catalog").style.display = "";
+        document.getElementById("hero").style.display = "";
+        document.querySelector(".ad-section").style.display = "";
+        document.querySelector(".welcome").style.display = "";
+        return;
     }
 
+    resultsSection.style.display = "block";
+    document.getElementById("catalog").style.display = "none";
+    document.getElementById("hero").style.display = "none";
+    document.querySelector(".ad-section").style.display = "none";
+    document.querySelector(".welcome").style.display = "none";
+
+    document.getElementById("resultsTitle").textContent = query
+        ? "Risultati per: " + activeQuery
+        : "Categoria: " + activeFilter;
+
+    resultsGrid.replaceChildren();
+    results.forEach(id => resultsGrid.appendChild(makeCard(id)));
+
+    empty.style.display = results.length ? "none" : "block";
 }
 
+document.getElementById("heroPlay").addEventListener("click", () => openVideo(1));
+document.getElementById("heroInfo").addEventListener("click", () => showInfo(1));
+document.getElementById("closeModal").addEventListener("click", closeVideo);
 
-/* HOME */
-
-function goHome(){
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-}
-
-
-/* INFO */
-
-function showInfo(id){
-
-    const video = videos[id];
-
-    if(!video) return;
-
-    document.getElementById("videoTitle").textContent =
-        video.title;
-
-    document.getElementById("videoDescription").textContent =
-        video.description;
-
-    document.getElementById("videoModal").classList.add("active");
-
-    document.body.style.overflow = "hidden";
-
-}
-
-
-/* DRAG TO SCROLL */
-
-document.querySelectorAll(".slider").forEach(slider => {
-
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    slider.addEventListener("mousedown",e => {
-
-        isDown = true;
-        slider.style.cursor = "grabbing";
-
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-
-    });
-
-    slider.addEventListener("mouseleave",() => {
-
-        isDown = false;
-        slider.style.cursor = "default";
-
-    });
-
-    slider.addEventListener("mouseup",() => {
-
-        isDown = false;
-        slider.style.cursor = "default";
-
-    });
-
-    slider.addEventListener("mousemove",e => {
-
-        if(!isDown) return;
-
-        e.preventDefault();
-
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 1.5;
-
-        slider.scrollLeft = scrollLeft - walk;
-
-    });
-
+document.getElementById("videoModal").addEventListener("click", event => {
+    if (event.target.id === "videoModal") closeVideo();
 });
 
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeVideo();
+});
+
+document.getElementById("searchInput").addEventListener("input", event => {
+    activeQuery = event.target.value.trim();
+    runSearch();
+});
+
+document.getElementById("categoryBar").addEventListener("click", event => {
+    const button = event.target.closest(".category-chip");
+    if (!button) return;
+
+    activeFilter = button.dataset.filter;
+
+    document.querySelectorAll(".category-chip").forEach(chip => {
+        chip.classList.toggle("active", chip === button);
+    });
+
+    runSearch();
+});
+
+window.addEventListener("scroll", () => {
+    document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+});
+
+document.querySelectorAll(".slider").forEach(slider => {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let moved = false;
+
+    slider.addEventListener("mousedown", event => {
+        if (event.button !== 0) return;
+        isDown = true;
+        moved = false;
+        startX = event.pageX;
+        scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener("mousemove", event => {
+        if (!isDown) return;
+        const distance = event.pageX - startX;
+        if (Math.abs(distance) > 5) moved = true;
+        if (moved) slider.scrollLeft = scrollLeft - distance;
+    });
+
+    ["mouseup", "mouseleave"].forEach(type => {
+        slider.addEventListener(type, () => {
+            isDown = false;
+        });
+    });
+});
+
+renderCatalog();
 </script>
 
 </body>
